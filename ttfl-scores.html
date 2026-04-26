@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TTFL Scores – Playoffs 2026</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="light"]{
+  --bg:#f7f6f2;--surface:#f9f8f5;--surface-2:#fbfbf9;--surface-off:#edeae5;
+  --divider:#dcd9d5;--border:#d4d1ca;
+  --text:#28251d;--text-muted:#7a7974;--text-faint:#bab9b4;
+  --primary:#01696f;--primary-h:#0c4e54;--primary-hl:#cedcd8;
+  --error:#a12c7b;--success:#437a22;--gold:#d19900;
+  --radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;
+  --shadow-sm:0 1px 2px oklch(0.2 0.01 80/.06);--shadow-md:0 4px 12px oklch(0.2 0.01 80/.1);
+  --tr:180ms cubic-bezier(.16,1,.3,1);
+}
+[data-theme="dark"]{
+  --bg:#171614;--surface:#1c1b19;--surface-2:#201f1d;--surface-off:#22211f;
+  --divider:#262523;--border:#393836;
+  --text:#cdccca;--text-muted:#797876;--text-faint:#5a5957;
+  --primary:#4f98a3;--primary-h:#227f8b;--primary-hl:#313b3b;
+  --error:#d163a7;--success:#6daa45;--gold:#e8af34;
+  --shadow-sm:0 1px 2px oklch(0 0 0/.2);--shadow-md:0 4px 12px oklch(0 0 0/.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{min-height:100dvh;font-family:'Satoshi',sans-serif;font-size:1rem;color:var(--text);background:var(--bg);line-height:1.5}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;transition:color var(--tr),background var(--tr),border-color var(--tr),box-shadow var(--tr)}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.nav-brand{font-weight:700;font-size:1.1rem;letter-spacing:-.02em;color:var(--primary)}
+.nav-right{display:flex;align-items:center;gap:.75rem}
+.btn-home{display:flex;align-items:center;gap:.4rem;padding:.4rem .85rem;border-radius:var(--radius-full);background:var(--surface-off);font-size:.85rem;font-weight:500}
+.btn-home:hover{background:var(--border)}
+.btn-theme{width:2rem;height:2rem;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;background:var(--surface-off)}
+.btn-theme:hover{background:var(--border)}
+
+/* LAYOUT */
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.25rem}
+
+/* FILTRES */
+.filter-bar{margin-bottom:1.75rem}
+.filter-label{font-size:.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem}
+.filter-row{display:flex;flex-wrap:wrap;gap:.45rem}
+.filter-btn{padding:.32rem .75rem;border-radius:var(--radius-full);border:1px solid var(--border);font-size:.8rem;font-weight:500;background:var(--surface);color:var(--text-muted)}
+.filter-btn:hover{border-color:var(--primary);color:var(--primary)}
+.filter-btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
+
+/* GRILLE */
+.picks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem}
+
+/* CARD */
+.pick-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:box-shadow var(--tr)}
+.pick-card:hover{box-shadow:var(--shadow-md)}
+
+.card-header{padding:.75rem 1rem .65rem;display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;border-bottom:1px solid var(--divider)}
+.card-meta{font-size:.72rem;color:var(--text-faint);font-weight:500;line-height:1.4}
+.card-meta strong{display:block;font-size:.78rem;color:var(--text-muted);margin-bottom:.1rem}
+.pick-badge{font-size:.68rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);letter-spacing:.04em;flex-shrink:0;white-space:nowrap}
+.badge-final{background:color-mix(in oklch,var(--success) 15%,var(--surface));color:var(--success)}
+.badge-live{background:color-mix(in oklch,var(--error) 15%,var(--surface));color:var(--error);animation:pulse 1.5s ease-in-out infinite}
+.badge-soon{background:color-mix(in oklch,var(--gold) 15%,var(--surface));color:var(--gold)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+
+/* SCORE ROW */
+.score-row{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1rem;gap:.5rem}
+.team-side{display:flex;flex-direction:column;align-items:center;gap:.35rem;min-width:60px}
+.team-logo{width:36px;height:36px;object-fit:contain;border-radius:50%;background:var(--surface-off)}
+.team-code{font-size:.8rem;font-weight:700;letter-spacing:.05em;color:var(--text-muted)}
+.score-center{display:flex;flex-direction:column;align-items:center;gap:.2rem;flex:1}
+.score-main{display:flex;align-items:center;gap:.6rem}
+.score-num{font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.score-dash{font-size:1.1rem;color:var(--text-faint)}
+.series-txt{font-size:.7rem;color:var(--text-muted);text-align:center}
+
+/* EXPAND BUTTON */
+.expand-btn{width:100%;padding:.5rem 1rem;font-size:.78rem;font-weight:600;color:var(--primary);display:flex;align-items:center;justify-content:center;gap:.35rem;border-top:1px solid var(--divider);background:none}
+.expand-btn:hover{background:color-mix(in oklch,var(--primary) 6%,var(--surface))}
+.expand-btn svg{transition:transform .25s ease}
+.expand-btn.open svg{transform:rotate(180deg)}
+
+/* BOXSCORE PANEL */
+.boxscore-panel{display:none;border-top:1px solid var(--divider)}
+.boxscore-panel.open{display:block}
+.bs-team-header{padding:.55rem 1rem .3rem;font-size:.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;background:var(--surface-2);display:flex;align-items:center;gap:.5rem}
+.bs-team-header img{width:18px;height:18px;border-radius:50%;background:var(--surface-off)}
+.bs-table{width:100%;border-collapse:collapse}
+.bs-table th{font-size:.65rem;font-weight:700;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em;padding:.35rem .75rem;text-align:right;border-bottom:1px solid var(--divider);background:var(--surface-2)}
+.bs-table th:first-child{text-align:left}
+.bs-table td{font-size:.78rem;padding:.4rem .75rem;text-align:right;border-bottom:1px solid color-mix(in oklch,var(--divider) 50%,transparent)}
+.bs-table td:first-child{text-align:left;font-weight:600;color:var(--text)}
+.bs-table tr:last-child td{border-bottom:none}
+.bs-table tr:hover td{background:color-mix(in oklch,var(--primary) 4%,var(--surface))}
+.pts-cell{font-weight:700;color:var(--text)}
+.pts-hi{color:var(--gold);font-weight:700}
+.pts-lo{color:var(--text-faint)}
+.bs-loading{padding:1.25rem;text-align:center;font-size:.8rem;color:var(--text-faint)}
+.bs-error{padding:1rem;text-align:center;font-size:.78rem;color:var(--error)}
+
+/* EMPTY */
+.empty{text-align:center;padding:4rem 1rem;color:var(--text-muted);grid-column:1/-1}
+
+@media(max-width:600px){
+  .picks-grid{grid-template-columns:1fr}
+  .nav{padding:.65rem 1rem}
+  .score-num{font-size:1.65rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-brand">🏀 TTFL Playoffs 2026</span>
+  <div class="nav-right">
+    <a href="https://erwandeluxe.github.io/TTFL-SCORES/" class="btn-home" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Accueil
+    </a>
+    <button class="btn-theme" data-theme-toggle aria-label="Thème">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="filter-bar">
+    <div class="filter-label">Filtrer par série</div>
+    <div class="filter-row" id="filterRow"></div>
+  </div>
+  <div class="picks-grid" id="picksGrid"></div>
+</div>
+
+<script>
+const GAMES = [
+  {gameId:"0042500121",gameDateTimeUTC:"2026-04-18T22:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 1",seriesText:"NYK leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"NYK",homeTeamId:1610612752,homeScore:113,awayTeamTricode:"ATL",awayTeamId:1610612737,awayScore:102},
+  {gameId:"0042500131",gameDateTimeUTC:"2026-04-18T17:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 1",seriesText:"CLE leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"CLE",homeTeamId:1610612739,homeScore:126,awayTeamTricode:"TOR",awayTeamId:1610612761,awayScore:113},
+  {gameId:"0042500161",gameDateTimeUTC:"2026-04-18T19:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 1",seriesText:"DEN leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"DEN",homeTeamId:1610612743,homeScore:116,awayTeamTricode:"MIN",awayTeamId:1610612750,awayScore:105},
+  {gameId:"0042500171",gameDateTimeUTC:"2026-04-19T00:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 1",seriesText:"LAL leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"LAL",homeTeamId:1610612747,homeScore:107,awayTeamTricode:"HOU",awayTeamId:1610612745,awayScore:98},
+  {gameId:"0042500101",gameDateTimeUTC:"2026-04-19T22:30:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 1",seriesText:"ORL leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"DET",homeTeamId:1610612765,homeScore:101,awayTeamTricode:"ORL",awayTeamId:1610612753,awayScore:112},
+  {gameId:"0042500111",gameDateTimeUTC:"2026-04-19T17:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 1",seriesText:"BOS leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"BOS",homeTeamId:1610612738,homeScore:123,awayTeamTricode:"PHI",awayTeamId:1610612755,awayScore:91},
+  {gameId:"0042500141",gameDateTimeUTC:"2026-04-19T19:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 1",seriesText:"OKC leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"OKC",homeTeamId:1610612760,homeScore:119,awayTeamTricode:"PHX",awayTeamId:1610612756,awayScore:84},
+  {gameId:"0042500151",gameDateTimeUTC:"2026-04-20T01:00:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 1",seriesText:"SAS leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"SAS",homeTeamId:1610612759,homeScore:111,awayTeamTricode:"POR",awayTeamId:1610612757,awayScore:98},
+  {gameId:"0042500122",gameDateTimeUTC:"2026-04-21T00:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"NYK",homeTeamId:1610612752,homeScore:106,awayTeamTricode:"ATL",awayTeamId:1610612737,awayScore:107},
+  {gameId:"0042500132",gameDateTimeUTC:"2026-04-20T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 2",seriesText:"CLE leads 2-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"CLE",homeTeamId:1610612739,homeScore:115,awayTeamTricode:"TOR",awayTeamId:1610612761,awayScore:105},
+  {gameId:"0042500162",gameDateTimeUTC:"2026-04-21T02:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"DEN",homeTeamId:1610612743,homeScore:114,awayTeamTricode:"MIN",awayTeamId:1610612750,awayScore:119},
+  {gameId:"0042500112",gameDateTimeUTC:"2026-04-21T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"BOS",homeTeamId:1610612738,homeScore:97,awayTeamTricode:"PHI",awayTeamId:1610612755,awayScore:111},
+  {gameId:"0042500152",gameDateTimeUTC:"2026-04-22T00:00:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"SAS",homeTeamId:1610612759,homeScore:103,awayTeamTricode:"POR",awayTeamId:1610612757,awayScore:106},
+  {gameId:"0042500172",gameDateTimeUTC:"2026-04-22T02:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 2",seriesText:"LAL leads 2-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"LAL",homeTeamId:1610612747,homeScore:101,awayTeamTricode:"HOU",awayTeamId:1610612745,awayScore:94},
+  {gameId:"0042500102",gameDateTimeUTC:"2026-04-22T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"DET",homeTeamId:1610612765,homeScore:98,awayTeamTricode:"ORL",awayTeamId:1610612753,awayScore:83},
+  {gameId:"0042500142",gameDateTimeUTC:"2026-04-23T01:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 2",seriesText:"OKC leads 2-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"OKC",homeTeamId:1610612760,homeScore:120,awayTeamTricode:"PHX",awayTeamId:1610612756,awayScore:107},
+  {gameId:"0042500123",gameDateTimeUTC:"2026-04-23T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 3",seriesText:"ATL leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"ATL",homeTeamId:1610612737,homeScore:109,awayTeamTricode:"NYK",awayTeamId:1610612752,awayScore:108},
+  {gameId:"0042500133",gameDateTimeUTC:"2026-04-24T00:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 3",seriesText:"CLE leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"TOR",homeTeamId:1610612761,homeScore:126,awayTeamTricode:"CLE",awayTeamId:1610612739,awayScore:104},
+  {gameId:"0042500163",gameDateTimeUTC:"2026-04-24T01:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 3",seriesText:"MIN leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"MIN",homeTeamId:1610612750,homeScore:113,awayTeamTricode:"DEN",awayTeamId:1610612743,awayScore:96},
+  {gameId:"0042500113",gameDateTimeUTC:"2026-04-24T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 3",seriesText:"BOS leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"PHI",homeTeamId:1610612755,homeScore:100,awayTeamTricode:"BOS",awayTeamId:1610612738,awayScore:108},
+  {gameId:"0042500153",gameDateTimeUTC:"2026-04-25T02:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 3",seriesText:"SAS leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"POR",homeTeamId:1610612757,homeScore:108,awayTeamTricode:"SAS",awayTeamId:1610612759,awayScore:120},
+  {gameId:"0042500173",gameDateTimeUTC:"2026-04-25T00:00:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 3",seriesText:"LAL leads 3-0",gameStatus:3,gameStatusText:"Final/OT",homeTeamTricode:"HOU",homeTeamId:1610612745,homeScore:108,awayTeamTricode:"LAL",awayTeamId:1610612747,awayScore:112},
+  {gameId:"0042500103",gameDateTimeUTC:"2026-04-25T17:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 3",seriesText:"ORL leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"ORL",homeTeamId:1610612753,homeScore:113,awayTeamTricode:"DET",awayTeamId:1610612765,awayScore:105},
+  {gameId:"0042500124",gameDateTimeUTC:"2026-04-25T22:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 4",seriesText:"Series tied 2-2",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"ATL",homeTeamId:1610612737,homeScore:98,awayTeamTricode:"NYK",awayTeamId:1610612752,awayScore:114},
+  {gameId:"0042500143",gameDateTimeUTC:"2026-04-25T19:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 3",seriesText:"OKC leads 3-0",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"PHX",homeTeamId:1610612756,homeScore:109,awayTeamTricode:"OKC",awayTeamId:1610612760,awayScore:121},
+  {gameId:"0042500164",gameDateTimeUTC:"2026-04-26T00:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 4",seriesText:"MIN leads 3-1",gameStatus:3,gameStatusText:"Final",homeTeamTricode:"MIN",homeTeamId:1610612750,homeScore:112,awayTeamTricode:"DEN",awayTeamId:1610612743,awayScore:96},
+  {gameId:"0042500114",gameDateTimeUTC:"2026-04-26T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 4",seriesText:"BOS leads 2-1",gameStatus:1,gameStatusText:"7:00 pm ET",homeTeamTricode:"PHI",homeTeamId:1610612755,homeScore:0,awayTeamTricode:"BOS",awayTeamId:1610612738,awayScore:0},
+  {gameId:"0042500134",gameDateTimeUTC:"2026-04-26T17:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 4",seriesText:"CLE leads 2-1",gameStatus:2,gameStatusText:"1st Qtr",homeTeamTricode:"TOR",homeTeamId:1610612761,homeScore:0,awayTeamTricode:"CLE",awayTeamId:1610612739,awayScore:0},
+  {gameId:"0042500154",gameDateTimeUTC:"2026-04-26T19:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 4",seriesText:"SAS leads 2-1",gameStatus:1,gameStatusText:"3:30 pm ET",homeTeamTricode:"POR",homeTeamId:1610612757,homeScore:0,awayTeamTricode:"SAS",awayTeamId:1610612759,awayScore:0},
+  {gameId:"0042500174",gameDateTimeUTC:"2026-04-27T01:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 4",seriesText:"LAL leads 3-0",gameStatus:1,gameStatusText:"9:30 pm ET",homeTeamTricode:"HOU",homeTeamId:1610612745,homeScore:0,awayTeamTricode:"LAL",awayTeamId:1610612747,awayScore:0}
+];
+
+function logo(id){return`https://cdn.nba.com/logos/nba/${id}/global/L/logo.svg`}
+function seriesKey(g){return[g.homeTeamTricode,g.awayTeamTricode].sort().join('-')}
+
+// Grouper séries
+const seriesMap={};
+GAMES.forEach(g=>{const k=seriesKey(g);if(!seriesMap[k])seriesMap[k]={key:k,label:[g.homeTeamTricode,g.awayTeamTricode].sort().join(' / '),games:[]};seriesMap[k].games.push(g);});
+const allSeries=Object.values(seriesMap);
+
+let activeSeries='ALL';
+const filterRow=document.getElementById('filterRow');
+
+function buildFilters(){
+  filterRow.innerHTML='';
+  const all=document.createElement('button');
+  all.className='filter-btn'+(activeSeries==='ALL'?' active':'');
+  all.textContent='Tous';
+  all.onclick=()=>{activeSeries='ALL';buildFilters();renderCards()};
+  filterRow.appendChild(all);
+  allSeries.forEach(s=>{
+    const b=document.createElement('button');
+    b.className='filter-btn'+(activeSeries===s.key?' active':'');
+    b.textContent=s.label;
+    b.onclick=()=>{activeSeries=s.key;buildFilters();renderCards()};
+    filterRow.appendChild(b);
+  });
+}
+
+// Cache boxscores
+const bsCache={};
+
+async function fetchBoxscore(gameId){
+  if(bsCache[gameId])return bsCache[gameId];
+  try{
+    const r=await fetch(`https://cdn.nba.com/static/json/liveData/boxscore/boxscore_${gameId}.json`);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    bsCache[gameId]=d;
+    return d;
+  }catch(e){return null;}
+}
+
+function calcTTFL(p){
+  // TTFL = pts + reb + ast + stl + blk - to - missed_fg - missed_ft
+  const s=p.statistics;
+  if(!s)return null;
+  const pts=parseInt(s.points||0);
+  const reb=parseInt(s.reboundsTotal||0);
+  const ast=parseInt(s.assists||0);
+  const stl=parseInt(s.steals||0);
+  const blk=parseInt(s.blocks||0);
+  const to=parseInt(s.turnovers||0);
+  const fga=parseInt(s.fieldGoalsAttempted||0);
+  const fgm=parseInt(s.fieldGoalsMade||0);
+  const fta=parseInt(s.freeThrowsAttempted||0);
+  const ftm=parseInt(s.freeThrowsMade||0);
+  const missedFG=fga-fgm;
+  const missedFT=fta-ftm;
+  return pts+reb+ast+stl+blk-to-missedFG-missedFT;
+}
+
+function renderPlayerRows(players, highlightTeamId){
+  return players
+    .filter(p=>p.status==='ACTIVE'||p.oncourt!==undefined)
+    .sort((a,b)=>parseInt(b.statistics?.points||0)-parseInt(a.statistics?.points||0))
+    .map(p=>{
+      const s=p.statistics;
+      if(!s)return'';
+      const min=s.minutesCalculated?s.minutesCalculated.replace('PT','').replace('M',''):'-';
+      const pts=parseInt(s.points||0);
+      const reb=parseInt(s.reboundsTotal||0);
+      const ast=parseInt(s.assists||0);
+      const ttfl=calcTTFL(p);
+      const name=p.name||(p.nameI||'');
+      const ttflClass=ttfl===null?'':(ttfl>=40?'pts-hi':ttfl<10?'pts-lo':'');
+      return`<tr>
+        <td>${name}</td>
+        <td>${min}'</td>
+        <td class="pts-cell">${pts}</td>
+        <td>${reb}</td>
+        <td>${ast}</td>
+        <td class="${ttflClass}">${ttfl!==null?ttfl:'-'}</td>
+      </tr>`;
+    }).join('');
+}
+
+async function toggleBoxscore(gameId, panelEl, btnEl){
+  if(panelEl.classList.contains('open')){
+    panelEl.classList.remove('open');
+    btnEl.classList.remove('open');
+    return;
+  }
+  panelEl.classList.add('open');
+  btnEl.classList.add('open');
+  if(panelEl.dataset.loaded==='1')return;
+
+  panelEl.innerHTML='<div class="bs-loading">Chargement des stats...</div>';
+  const data=await fetchBoxscore(gameId);
+  if(!data){
+    panelEl.innerHTML='<div class="bs-error">Stats indisponibles pour ce match.</div>';
+    return;
+  }
+
+  const game=data.game;
+  const homeT=game.homeTeam;
+  const awayT=game.awayTeam;
+
+  function teamSection(team){
+    const rows=renderPlayerRows(team.players||[],team.teamId);
+    return`
+      <div class="bs-team-header">
+        <img src="${logo(team.teamId)}" alt="${team.teamTricode}" loading="lazy" width="18" height="18">
+        ${team.teamCity} ${team.teamName}
+      </div>
+      <table class="bs-table">
+        <thead><tr>
+          <th>Joueur</th><th>Min</th><th>PTS</th><th>REB</th><th>AST</th><th style="color:var(--gold)">TTFL</th>
+        </tr></thead>
+        <tbody>${rows||'<tr><td colspan="6" style="text-align:center;padding:.75rem;color:var(--text-faint)">Pas de données</td></tr>'}</tbody>
+      </table>`;
+  }
+
+  panelEl.innerHTML=teamSection(homeT)+teamSection(awayT);
+  panelEl.dataset.loaded='1';
+}
+
+function renderCards(){
+  const grid=document.getElementById('picksGrid');
+  let games=[...GAMES].sort((a,b)=>new Date(b.gameDateTimeUTC)-new Date(a.gameDateTimeUTC));
+  if(activeSeries!=='ALL')games=games.filter(g=>seriesKey(g)===activeSeries);
+
+  if(!games.length){
+    grid.innerHTML='<div class="empty">Aucun match trouvé</div>';
+    return;
+  }
+
+  grid.innerHTML=games.map(g=>{
+    const dt=new Date(g.gameDateTimeUTC);
+    const dateStr=dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
+    const isF=g.gameStatus===3,isL=g.gameStatus===2;
+    const badgeCls=isF?'badge-final':isL?'badge-live':'badge-soon';
+    const badgeTxt=isF?'Final':isL?'🔴 Live':g.gameStatusText;
+    const showScore=isF||isL;
+    const hS=showScore?g.homeScore:'–';
+    const aS=showScore?g.awayScore:'–';
+    const canExpand=isF||isL;
+
+    return`<div class="pick-card" id="card-${g.gameId}">
+      <div class="card-header">
+        <div class="card-meta">
+          <strong>${g.gameLabel} – ${g.gameSubLabel}</strong>
+          ${dateStr}
+        </div>
+        <span class="pick-badge ${badgeCls}">${badgeTxt}</span>
+      </div>
+      <div class="score-row">
+        <div class="team-side">
+          <img class="team-logo" src="${logo(g.homeTeamId)}" alt="${g.homeTeamTricode}" loading="lazy" width="36" height="36">
+          <span class="team-code">${g.homeTeamTricode}</span>
+        </div>
+        <div class="score-center">
+          <div class="score-main">
+            <span class="score-num">${hS}</span>
+            <span class="score-dash">–</span>
+            <span class="score-num">${aS}</span>
+          </div>
+          <div class="series-txt">${g.seriesText}</div>
+        </div>
+        <div class="team-side">
+          <img class="team-logo" src="${logo(g.awayTeamId)}" alt="${g.awayTeamTricode}" loading="lazy" width="36" height="36">
+          <span class="team-code">${g.awayTeamTricode}</span>
+        </div>
+      </div>
+      ${canExpand?`
+      <button class="expand-btn" id="btn-${g.gameId}" onclick="toggleBoxscore('${g.gameId}',document.getElementById('bs-${g.gameId}'),this)">
+        Stats joueurs (PTS · REB · AST · TTFL)
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="boxscore-panel" id="bs-${g.gameId}"></div>
+      `:''}
+    </div>`;
+  }).join('');
+}
+
+// Theme toggle
+(function(){
+  const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
+  t&&t.addEventListener('click',()=>{
+    const d=r.getAttribute('data-theme')==='dark'?'light':'dark';
+    r.setAttribute('data-theme',d);
+    t.innerHTML=d==='dark'
+      ?'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+      :'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+  });
+})();
+
+buildFilters();
+renderCards();
+</script>
+</body>
+</html>
