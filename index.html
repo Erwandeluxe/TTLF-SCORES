@@ -71,19 +71,25 @@ a{color:inherit;text-decoration:none}
 .bs-team-header img{width:16px;height:16px;border-radius:50%}
 .bs-table{width:100%;border-collapse:collapse}
 .bs-table th{font-size:.62rem;font-weight:700;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em;padding:.32rem .7rem;text-align:right;border-bottom:1px solid var(--divider);background:var(--surface-2)}
-.bs-table th:first-child{text-align:center}
-.bs-table th:nth-child(2){text-align:left}
+.bs-table th:nth-child(1){text-align:right}
+.bs-table th:nth-child(2){text-align:right}
+.bs-table th:nth-child(3){text-align:right}
+.bs-table th:nth-child(4){text-align:left}
 .bs-table td{font-size:.77rem;padding:.38rem .7rem;text-align:right;border-bottom:1px solid color-mix(in oklch,var(--divider) 45%,transparent)}
-.bs-table td:first-child{text-align:center;font-weight:800}
-.bs-table td:nth-child(2){text-align:left;font-weight:600;color:var(--text)}
+.bs-table td:nth-child(4){text-align:left;font-weight:600;color:var(--text)}
 .bs-table tr:last-child td{border-bottom:none}
 .bs-table tr:hover td{background:color-mix(in oklch,var(--primary) 4%,var(--surface))}
-.pts-cell{font-weight:700}
+.col-bonus{color:var(--success);font-weight:800}
+.col-malus{color:var(--error);font-weight:800}
+.col-total{font-weight:800}
 .ttfl-god{color:#f0c040}
 .ttfl-great{color:var(--gold)}
 .ttfl-ok{color:var(--text)}
 .ttfl-bad{color:var(--text-muted)}
 .ttfl-neg{color:var(--error)}
+.th-bonus{color:var(--success) !important}
+.th-malus{color:var(--error) !important}
+.th-total{color:var(--gold) !important}
 .bs-legend{padding:.4rem .9rem;font-size:.63rem;color:var(--text-faint);background:var(--surface-2);border-top:1px solid var(--divider);line-height:1.8}
 .bs-loading{padding:1.25rem;text-align:center;font-size:.8rem;color:var(--text-faint)}
 .empty{text-align:center;padding:4rem 1rem;color:var(--text-muted)}
@@ -179,7 +185,7 @@ function buildFilters(){
 }
 
 function ttlfClass(v){
-  if(v===null||v===undefined)return"";
+  if(v===null||v===undefined)return"ttfl-ok";
   if(v>=60)return"ttfl-god";
   if(v>=40)return"ttfl-great";
   if(v>=20)return"ttfl-ok";
@@ -187,29 +193,44 @@ function ttlfClass(v){
   return"ttfl-neg";
 }
 
+function calcBonus(p){
+  return p.pts + p.reb + p.ast + p.stl + p.blk + p.fgm + p.tpm + p.ftm;
+}
+function calcMalus(p){
+  return p.to + (p.fga - p.fgm) + (p.tpa - p.tpm) + (p.fta - p.ftm);
+}
+
 function buildTeamTable(teamData,teamId){
   if(!teamData||!teamData.players||!teamData.players.length)
     return'<p style="padding:.75rem 1rem;text-align:center;font-size:.78rem;color:var(--text-faint)">Pas de donnees joueurs</p>';
-  const rows=teamData.players.map(p=>
-    "<tr>"
-    +"<td class='"+ttlfClass(p.ttlf)+"'>"+p.ttlf+"</td>"
-    +"<td>"+p.name+"</td>"
-    +"<td>"+p.min+"'</td>"
-    +"<td class='pts-cell'>"+p.pts+"</td>"
-    +"<td>"+p.reb+"</td>"
-    +"<td>"+p.ast+"</td>"
-    +"<td>"+p.stl+"</td>"
-    +"<td>"+p.blk+"</td>"
-    +"<td>"+p.fgm+"/"+p.fga+"</td>"
-    +"<td>"+p.tpm+"/"+p.tpa+"</td>"
-    +"<td>"+p.ftm+"/"+p.fta+"</td>"
-    +"</tr>"
-  ).join("");
+  const rows=teamData.players.map(p=>{
+    const bonus=calcBonus(p);
+    const malus=calcMalus(p);
+    const total=bonus-malus;
+    return "<tr>"
+      +"<td class='col-bonus'>"+bonus+"</td>"
+      +"<td class='col-malus'>-"+malus+"</td>"
+      +"<td class='col-total "+ttlfClass(total)+"'>"+total+"</td>"
+      +"<td>"+p.name+"</td>"
+      +"<td>"+p.min+"'</td>"
+      +"<td>"+p.pts+"</td>"
+      +"<td>"+p.reb+"</td>"
+      +"<td>"+p.ast+"</td>"
+      +"<td>"+p.stl+"</td>"
+      +"<td>"+p.blk+"</td>"
+      +"<td>"+p.to+"</td>"
+      +"<td>"+p.fgm+"/"+p.fga+"</td>"
+      +"<td>"+p.tpm+"/"+p.tpa+"</td>"
+      +"<td>"+p.ftm+"/"+p.fta+"</td>"
+      +"</tr>";
+  }).join("");
   return'<div class="bs-team-header"><img src="'+logo(teamId)+'" width="16" height="16"> '+teamData.tricode+'</div>'
     +'<table class="bs-table"><thead><tr>'
-    +'<th style="color:var(--gold)">TTLF</th>'
+    +'<th class="th-bonus">BON</th>'
+    +'<th class="th-malus">MAL</th>'
+    +'<th class="th-total">TOT</th>'
     +'<th style="text-align:left">Joueur</th>'
-    +'<th>Min</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>TL</th><th>3P</th><th>LF</th>'
+    +'<th>Min</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>TO</th><th>TL</th><th>3P</th><th>LF</th>'
     +'</tr></thead><tbody>'+rows+"</tbody></table>";
 }
 
@@ -222,7 +243,7 @@ function toggleBoxscore(gameId,panelEl,btnEl){
   panelEl.innerHTML=
     buildTeamTable(live.homeTeam,gDef.homeTeamId)+
     buildTeamTable(live.awayTeam,gDef.awayTeamId)+
-    '<div class="bs-legend">TTLF = PTS+REB+AST+STL+BLK+TL+3P+LF (reussis) - TL-3P-LF (rates) | <span class="ttfl-god">■</span>≥60 <span class="ttfl-great">■</span>≥40 <span class="ttfl-ok">■</span>≥20 <span class="ttfl-bad">■</span>≥0 <span class="ttfl-neg">■</span>&lt;0</div>';
+    '<div class="bs-legend">BON = PTS+REB+AST+STL+BLK+TL+3P+LF reussis | MAL = TO+TL rates+3P rates+LF rates | TOT = BON - MAL</div>';
 }
 
 function renderCards(){
