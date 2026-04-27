@@ -71,9 +71,6 @@ a{color:inherit;text-decoration:none}
 .bs-team-header img{width:16px;height:16px;border-radius:50%}
 .bs-table{width:100%;border-collapse:collapse}
 .bs-table th{font-size:.62rem;font-weight:700;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em;padding:.32rem .7rem;text-align:right;border-bottom:1px solid var(--divider);background:var(--surface-2)}
-.bs-table th:nth-child(1){text-align:right}
-.bs-table th:nth-child(2){text-align:right}
-.bs-table th:nth-child(3){text-align:right}
 .bs-table th:nth-child(4){text-align:left}
 .bs-table td{font-size:.77rem;padding:.38rem .7rem;text-align:right;border-bottom:1px solid color-mix(in oklch,var(--divider) 45%,transparent)}
 .bs-table td:nth-child(4){text-align:left;font-weight:600;color:var(--text)}
@@ -91,9 +88,8 @@ a{color:inherit;text-decoration:none}
 .th-malus{color:var(--error) !important}
 .th-total{color:var(--gold) !important}
 .bs-legend{padding:.4rem .9rem;font-size:.63rem;color:var(--text-faint);background:var(--surface-2);border-top:1px solid var(--divider);line-height:1.8}
-.bs-loading{padding:1.25rem;text-align:center;font-size:.8rem;color:var(--text-faint)}
-.empty{text-align:center;padding:4rem 1rem;color:var(--text-muted)}
 .global-loading{text-align:center;padding:3rem;color:var(--text-muted);font-size:.9rem}
+.empty{text-align:center;padding:4rem 1rem;color:var(--text-muted)}
 </style>
 </head>
 <body>
@@ -123,36 +119,46 @@ a{color:inherit;text-decoration:none}
 const GAS_URL="https://script.google.com/macros/s/AKfycbxMezV9DzC8jNmpwFHKGuR58Rxg4PIK-Zzi2-XedKVzu_n1tkihoPtYe-R7Z8DrbNOw/exec";
 
 const GAMES=[
-  {gameId:"0042500121",gameDateTimeUTC:"2026-04-18T22:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 1",seriesText:"NYK leads 1-0",homeTeamTricode:"NYK",homeTeamId:1610612752,homeScore:113,awayTeamTricode:"ATL",awayTeamId:1610612737,awayScore:102},
-  {gameId:"0042500131",gameDateTimeUTC:"2026-04-18T17:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 1",seriesText:"CLE leads 1-0",homeTeamTricode:"CLE",homeTeamId:1610612739,homeScore:126,awayTeamTricode:"TOR",awayTeamId:1610612761,awayScore:113},
-  {gameId:"0042500161",gameDateTimeUTC:"2026-04-18T19:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 1",seriesText:"DEN leads 1-0",homeTeamTricode:"DEN",homeTeamId:1610612743,homeScore:116,awayTeamTricode:"MIN",awayTeamId:1610612750,awayScore:105},
-  {gameId:"0042500171",gameDateTimeUTC:"2026-04-19T00:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 1",seriesText:"LAL leads 1-0",homeTeamTricode:"LAL",homeTeamId:1610612747,homeScore:107,awayTeamTricode:"HOU",awayTeamId:1610612745,awayScore:98},
-  {gameId:"0042500101",gameDateTimeUTC:"2026-04-19T22:30:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 1",seriesText:"ORL leads 1-0",homeTeamTricode:"DET",homeTeamId:1610612765,homeScore:101,awayTeamTricode:"ORL",awayTeamId:1610612753,awayScore:112},
-  {gameId:"0042500111",gameDateTimeUTC:"2026-04-19T17:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 1",seriesText:"BOS leads 1-0",homeTeamTricode:"BOS",homeTeamId:1610612738,homeScore:123,awayTeamTricode:"PHI",awayTeamId:1610612755,awayScore:91},
-  {gameId:"0042500141",gameDateTimeUTC:"2026-04-19T19:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 1",seriesText:"OKC leads 1-0",homeTeamTricode:"OKC",homeTeamId:1610612760,homeScore:119,awayTeamTricode:"PHX",awayTeamId:1610612756,awayScore:84},
-  {gameId:"0042500151",gameDateTimeUTC:"2026-04-20T01:00:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 1",seriesText:"SAS leads 1-0",homeTeamTricode:"SAS",homeTeamId:1610612759,homeScore:111,awayTeamTricode:"POR",awayTeamId:1610612757,awayScore:98},
-  {gameId:"0042500122",gameDateTimeUTC:"2026-04-21T00:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",homeTeamTricode:"NYK",homeTeamId:1610612752,homeScore:106,awayTeamTricode:"ATL",awayTeamId:1610612737,awayScore:107},
-  {gameId:"0042500132",gameDateTimeUTC:"2026-04-20T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 2",seriesText:"CLE leads 2-0",homeTeamTricode:"CLE",homeTeamId:1610612739,homeScore:115,awayTeamTricode:"TOR",awayTeamId:1610612761,awayScore:105},
-  {gameId:"0042500162",gameDateTimeUTC:"2026-04-21T02:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",homeTeamTricode:"DEN",homeTeamId:1610612743,homeScore:114,awayTeamTricode:"MIN",awayTeamId:1610612750,awayScore:119},
-  {gameId:"0042500112",gameDateTimeUTC:"2026-04-21T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",homeTeamTricode:"BOS",homeTeamId:1610612738,homeScore:97,awayTeamTricode:"PHI",awayTeamId:1610612755,awayScore:111},
-  {gameId:"0042500152",gameDateTimeUTC:"2026-04-22T00:00:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",homeTeamTricode:"SAS",homeTeamId:1610612759,homeScore:103,awayTeamTricode:"POR",awayTeamId:1610612757,awayScore:106},
-  {gameId:"0042500172",gameDateTimeUTC:"2026-04-22T02:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 2",seriesText:"LAL leads 2-0",homeTeamTricode:"LAL",homeTeamId:1610612747,homeScore:101,awayTeamTricode:"HOU",awayTeamId:1610612745,awayScore:94},
-  {gameId:"0042500102",gameDateTimeUTC:"2026-04-22T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",homeTeamTricode:"DET",homeTeamId:1610612765,homeScore:98,awayTeamTricode:"ORL",awayTeamId:1610612753,awayScore:83},
-  {gameId:"0042500142",gameDateTimeUTC:"2026-04-23T01:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 2",seriesText:"OKC leads 2-0",homeTeamTricode:"OKC",homeTeamId:1610612760,homeScore:120,awayTeamTricode:"PHX",awayTeamId:1610612756,awayScore:107},
-  {gameId:"0042500123",gameDateTimeUTC:"2026-04-23T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 3",seriesText:"ATL leads 2-1",homeTeamTricode:"ATL",homeTeamId:1610612737,homeScore:109,awayTeamTricode:"NYK",awayTeamId:1610612752,awayScore:108},
-  {gameId:"0042500133",gameDateTimeUTC:"2026-04-24T00:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 3",seriesText:"CLE leads 2-1",homeTeamTricode:"TOR",homeTeamId:1610612761,homeScore:126,awayTeamTricode:"CLE",awayTeamId:1610612739,awayScore:104},
-  {gameId:"0042500163",gameDateTimeUTC:"2026-04-24T01:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 3",seriesText:"MIN leads 2-1",homeTeamTricode:"MIN",homeTeamId:1610612750,homeScore:113,awayTeamTricode:"DEN",awayTeamId:1610612743,awayScore:96},
-  {gameId:"0042500113",gameDateTimeUTC:"2026-04-24T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 3",seriesText:"BOS leads 2-1",homeTeamTricode:"PHI",homeTeamId:1610612755,homeScore:100,awayTeamTricode:"BOS",awayTeamId:1610612738,awayScore:108},
-  {gameId:"0042500153",gameDateTimeUTC:"2026-04-25T02:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 3",seriesText:"SAS leads 2-1",homeTeamTricode:"POR",homeTeamId:1610612757,homeScore:108,awayTeamTricode:"SAS",awayTeamId:1610612759,awayScore:120},
-  {gameId:"0042500173",gameDateTimeUTC:"2026-04-25T00:00:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 3",seriesText:"LAL leads 3-0",homeTeamTricode:"HOU",homeTeamId:1610612745,homeScore:108,awayTeamTricode:"LAL",awayTeamId:1610612747,awayScore:112},
-  {gameId:"0042500103",gameDateTimeUTC:"2026-04-25T17:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 3",seriesText:"ORL leads 2-1",homeTeamTricode:"ORL",homeTeamId:1610612753,homeScore:113,awayTeamTricode:"DET",awayTeamId:1610612765,awayScore:105},
-  {gameId:"0042500124",gameDateTimeUTC:"2026-04-25T22:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 4",seriesText:"Series tied 2-2",homeTeamTricode:"ATL",homeTeamId:1610612737,homeScore:98,awayTeamTricode:"NYK",awayTeamId:1610612752,awayScore:114},
-  {gameId:"0042500143",gameDateTimeUTC:"2026-04-25T19:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 3",seriesText:"OKC leads 3-0",homeTeamTricode:"PHX",homeTeamId:1610612756,homeScore:109,awayTeamTricode:"OKC",awayTeamId:1610612760,awayScore:121},
-  {gameId:"0042500164",gameDateTimeUTC:"2026-04-26T00:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 4",seriesText:"MIN leads 3-1",homeTeamTricode:"MIN",homeTeamId:1610612750,homeScore:112,awayTeamTricode:"DEN",awayTeamId:1610612743,awayScore:96},
-  {gameId:"0042500114",gameDateTimeUTC:"2026-04-26T23:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 4",seriesText:"",homeTeamTricode:"PHI",homeTeamId:1610612755,homeScore:0,awayTeamTricode:"BOS",awayTeamId:1610612738,awayScore:0},
-  {gameId:"0042500134",gameDateTimeUTC:"2026-04-26T17:00:00Z",gameLabel:"East 1st Round",gameSubLabel:"Game 4",seriesText:"",homeTeamTricode:"TOR",homeTeamId:1610612761,homeScore:0,awayTeamTricode:"CLE",awayTeamId:1610612739,awayScore:0},
-  {gameId:"0042500154",gameDateTimeUTC:"2026-04-26T19:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 4",seriesText:"",homeTeamTricode:"POR",homeTeamId:1610612757,homeScore:0,awayTeamTricode:"SAS",awayTeamId:1610612759,awayScore:0},
-  {gameId:"0042500174",gameDateTimeUTC:"2026-04-27T01:30:00Z",gameLabel:"West 1st Round",gameSubLabel:"Game 4",seriesText:"LAL leads 3-0",homeTeamTricode:"HOU",homeTeamId:1610612745,homeScore:0,awayTeamTricode:"LAL",awayTeamId:1610612747,awayScore:0}
+  {gameId:"0042500121",gameDateTimeUTC:"2026-04-18T22:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 1",seriesText:"NYK leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612752,homeTeamTricode:"NYK",homeScore:113,awayTeamId:1610612737,awayTeamTricode:"ATL",awayScore:102},
+  {gameId:"0042500131",gameDateTimeUTC:"2026-04-18T17:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 1",seriesText:"CLE leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612739,homeTeamTricode:"CLE",homeScore:126,awayTeamId:1610612761,awayTeamTricode:"TOR",awayScore:113},
+  {gameId:"0042500161",gameDateTimeUTC:"2026-04-18T19:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 1",seriesText:"DEN leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612743,homeTeamTricode:"DEN",homeScore:116,awayTeamId:1610612750,awayTeamTricode:"MIN",awayScore:105},
+  {gameId:"0042500171",gameDateTimeUTC:"2026-04-19T00:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 1",seriesText:"LAL leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612747,homeTeamTricode:"LAL",homeScore:107,awayTeamId:1610612745,awayTeamTricode:"HOU",awayScore:98},
+  {gameId:"0042500101",gameDateTimeUTC:"2026-04-19T22:30:00Z",gameLabel:"East First Round",gameSubLabel:"Game 1",seriesText:"ORL leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612765,homeTeamTricode:"DET",homeScore:101,awayTeamId:1610612753,awayTeamTricode:"ORL",awayScore:112},
+  {gameId:"0042500111",gameDateTimeUTC:"2026-04-19T17:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 1",seriesText:"BOS leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612738,homeTeamTricode:"BOS",homeScore:123,awayTeamId:1610612755,awayTeamTricode:"PHI",awayScore:91},
+  {gameId:"0042500141",gameDateTimeUTC:"2026-04-19T19:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 1",seriesText:"OKC leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612760,homeTeamTricode:"OKC",homeScore:119,awayTeamId:1610612756,awayTeamTricode:"PHX",awayScore:84},
+  {gameId:"0042500151",gameDateTimeUTC:"2026-04-20T01:00:00Z",gameLabel:"West First Round",gameSubLabel:"Game 1",seriesText:"SAS leads 1-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612759,homeTeamTricode:"SAS",homeScore:111,awayTeamId:1610612757,awayTeamTricode:"POR",awayScore:98},
+  {gameId:"0042500122",gameDateTimeUTC:"2026-04-21T00:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612752,homeTeamTricode:"NYK",homeScore:106,awayTeamId:1610612737,awayTeamTricode:"ATL",awayScore:107},
+  {gameId:"0042500132",gameDateTimeUTC:"2026-04-20T23:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 2",seriesText:"CLE leads 2-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612739,homeTeamTricode:"CLE",homeScore:115,awayTeamId:1610612761,awayTeamTricode:"TOR",awayScore:105},
+  {gameId:"0042500162",gameDateTimeUTC:"2026-04-21T02:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612743,homeTeamTricode:"DEN",homeScore:114,awayTeamId:1610612750,awayTeamTricode:"MIN",awayScore:119},
+  {gameId:"0042500112",gameDateTimeUTC:"2026-04-21T23:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612738,homeTeamTricode:"BOS",homeScore:97,awayTeamId:1610612755,awayTeamTricode:"PHI",awayScore:111},
+  {gameId:"0042500152",gameDateTimeUTC:"2026-04-22T00:00:00Z",gameLabel:"West First Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612759,homeTeamTricode:"SAS",homeScore:103,awayTeamId:1610612757,awayTeamTricode:"POR",awayScore:106},
+  {gameId:"0042500172",gameDateTimeUTC:"2026-04-22T02:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 2",seriesText:"LAL leads 2-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612747,homeTeamTricode:"LAL",homeScore:101,awayTeamId:1610612745,awayTeamTricode:"HOU",awayScore:94},
+  {gameId:"0042500102",gameDateTimeUTC:"2026-04-22T23:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 2",seriesText:"Series tied 1-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612765,homeTeamTricode:"DET",homeScore:98,awayTeamId:1610612753,awayTeamTricode:"ORL",awayScore:83},
+  {gameId:"0042500142",gameDateTimeUTC:"2026-04-23T01:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 2",seriesText:"OKC leads 2-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612760,homeTeamTricode:"OKC",homeScore:120,awayTeamId:1610612756,awayTeamTricode:"PHX",awayScore:107},
+  {gameId:"0042500123",gameDateTimeUTC:"2026-04-23T23:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 3",seriesText:"ATL leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612737,homeTeamTricode:"ATL",homeScore:109,awayTeamId:1610612752,awayTeamTricode:"NYK",awayScore:108},
+  {gameId:"0042500133",gameDateTimeUTC:"2026-04-24T00:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 3",seriesText:"CLE leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612761,homeTeamTricode:"TOR",homeScore:126,awayTeamId:1610612739,awayTeamTricode:"CLE",awayScore:104},
+  {gameId:"0042500163",gameDateTimeUTC:"2026-04-24T01:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 3",seriesText:"MIN leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612750,homeTeamTricode:"MIN",homeScore:113,awayTeamId:1610612743,awayTeamTricode:"DEN",awayScore:96},
+  {gameId:"0042500113",gameDateTimeUTC:"2026-04-24T23:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 3",seriesText:"BOS leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612755,homeTeamTricode:"PHI",homeScore:100,awayTeamId:1610612738,awayTeamTricode:"BOS",awayScore:108},
+  {gameId:"0042500153",gameDateTimeUTC:"2026-04-25T02:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 3",seriesText:"SAS leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612757,homeTeamTricode:"POR",homeScore:108,awayTeamId:1610612759,awayTeamTricode:"SAS",awayScore:120},
+  {gameId:"0042500173",gameDateTimeUTC:"2026-04-25T00:00:00Z",gameLabel:"West First Round",gameSubLabel:"Game 3",seriesText:"LAL leads 3-0",gameStatus:3,gameStatusText:"Final/OT",homeTeamId:1610612745,homeTeamTricode:"HOU",homeScore:108,awayTeamId:1610612747,awayTeamTricode:"LAL",awayScore:112},
+  {gameId:"0042500103",gameDateTimeUTC:"2026-04-25T17:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 3",seriesText:"ORL leads 2-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612753,homeTeamTricode:"ORL",homeScore:113,awayTeamId:1610612765,awayTeamTricode:"DET",awayScore:105},
+  {gameId:"0042500124",gameDateTimeUTC:"2026-04-25T22:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 4",seriesText:"Series tied 2-2",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612737,homeTeamTricode:"ATL",homeScore:98,awayTeamId:1610612752,awayTeamTricode:"NYK",awayScore:114},
+  {gameId:"0042500143",gameDateTimeUTC:"2026-04-25T19:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 3",seriesText:"OKC leads 3-0",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612756,homeTeamTricode:"PHX",homeScore:109,awayTeamId:1610612760,awayTeamTricode:"OKC",awayScore:121},
+  {gameId:"0042500164",gameDateTimeUTC:"2026-04-26T00:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 4",seriesText:"MIN leads 3-1",gameStatus:3,gameStatusText:"Final",homeTeamId:1610612750,homeTeamTricode:"MIN",homeScore:112,awayTeamId:1610612743,awayTeamTricode:"DEN",awayScore:96},
+  {gameId:"0042500114",gameDateTimeUTC:"2026-04-26T23:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 4",seriesText:"BOS leads 2-1",gameStatus:1,gameStatusText:"7:00 pm ET",homeTeamId:1610612755,homeTeamTricode:"PHI",homeScore:0,awayTeamId:1610612738,awayTeamTricode:"BOS",awayScore:0},
+  {gameId:"0042500134",gameDateTimeUTC:"2026-04-26T17:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 4",seriesText:"CLE leads 2-1",gameStatus:2,gameStatusText:"1st Qtr",homeTeamId:1610612761,homeTeamTricode:"TOR",homeScore:0,awayTeamId:1610612739,awayTeamTricode:"CLE",awayScore:0},
+  {gameId:"0042500154",gameDateTimeUTC:"2026-04-26T19:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 4",seriesText:"SAS leads 2-1",gameStatus:1,gameStatusText:"3:30 pm ET",homeTeamId:1610612757,homeTeamTricode:"POR",homeScore:0,awayTeamId:1610612759,awayTeamTricode:"SAS",awayScore:0},
+  {gameId:"0042500174",gameDateTimeUTC:"2026-04-27T01:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 4",seriesText:"LAL leads 3-0",gameStatus:1,gameStatusText:"9:30 pm ET",homeTeamId:1610612745,homeTeamTricode:"HOU",homeScore:0,awayTeamId:1610612747,awayTeamTricode:"LAL",awayScore:0},
+  {gameId:"0042500104",gameDateTimeUTC:"2026-04-28T00:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 4",seriesText:"ORL leads 2-1",gameStatus:1,gameStatusText:"8:00 pm ET",homeTeamId:1610612753,homeTeamTricode:"ORL",homeScore:0,awayTeamId:1610612765,awayTeamTricode:"DET",awayScore:0},
+  {gameId:"0042500144",gameDateTimeUTC:"2026-04-28T01:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 4",seriesText:"OKC leads 3-0",gameStatus:1,gameStatusText:"9:30 pm ET",homeTeamId:1610612756,homeTeamTricode:"PHX",homeScore:0,awayTeamId:1610612760,awayTeamTricode:"OKC",awayScore:0},
+  {gameId:"0042500165",gameDateTimeUTC:"2026-04-28T02:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 5",seriesText:"MIN leads 3-1",gameStatus:1,gameStatusText:"10:30 pm ET",homeTeamId:1610612743,homeTeamTricode:"DEN",homeScore:0,awayTeamId:1610612750,awayTeamTricode:"MIN",awayScore:0},
+  {gameId:"0042500115",gameDateTimeUTC:"2026-04-28T23:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 5",seriesText:"BOS leads 2-1",gameStatus:1,gameStatusText:"7:00 pm ET",homeTeamId:1610612738,homeTeamTricode:"BOS",homeScore:0,awayTeamId:1610612755,awayTeamTricode:"PHI",awayScore:0},
+  {gameId:"0042500125",gameDateTimeUTC:"2026-04-29T00:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 5",seriesText:"Series tied 2-2",gameStatus:1,gameStatusText:"8:00 pm ET",homeTeamId:1610612752,homeTeamTricode:"NYK",homeScore:0,awayTeamId:1610612737,awayTeamTricode:"ATL",awayScore:0},
+  {gameId:"0042500155",gameDateTimeUTC:"2026-04-29T01:30:00Z",gameLabel:"West First Round",gameSubLabel:"Game 5",seriesText:"SAS leads 2-1",gameStatus:1,gameStatusText:"9:30 pm ET",homeTeamId:1610612759,homeTeamTricode:"SAS",homeScore:0,awayTeamId:1610612757,awayTeamTricode:"POR",awayScore:0},
+  {gameId:"0042500105",gameDateTimeUTC:"2026-04-29T04:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 5",seriesText:"ORL leads 2-1",gameStatus:1,gameStatusText:"TBD",homeTeamId:1610612765,homeTeamTricode:"DET",homeScore:0,awayTeamId:1610612753,awayTeamTricode:"ORL",awayScore:0},
+  {gameId:"0042500135",gameDateTimeUTC:"2026-04-29T04:00:00Z",gameLabel:"East First Round",gameSubLabel:"Game 5",seriesText:"CLE leads 2-1",gameStatus:1,gameStatusText:"TBD",homeTeamId:1610612739,homeTeamTricode:"CLE",homeScore:0,awayTeamId:1610612761,awayTeamTricode:"TOR",awayScore:0},
+  {gameId:"0042500145",gameDateTimeUTC:"2026-04-29T04:00:00Z",gameLabel:"West First Round",gameSubLabel:"Game 5",seriesText:"OKC leads 3-0",gameStatus:1,gameStatusText:"TBD",homeTeamId:1610612760,homeTeamTricode:"OKC",homeScore:0,awayTeamId:1610612756,awayTeamTricode:"PHX",awayScore:0},
+  {gameId:"0042500175",gameDateTimeUTC:"2026-04-29T04:00:00Z",gameLabel:"West First Round",gameSubLabel:"Game 5",seriesText:"LAL leads 3-0",gameStatus:1,gameStatusText:"TBD",homeTeamId:1610612747,homeTeamTricode:"LAL",homeScore:0,awayTeamId:1610612745,awayTeamTricode:"HOU",awayScore:0}
 ];
 
 let liveIndex={};
@@ -184,7 +190,7 @@ function buildFilters(){
   });
 }
 
-function ttlfClass(v){
+function ttflClass(v){
   if(v===null||v===undefined)return"ttfl-ok";
   if(v>=60)return"ttfl-god";
   if(v>=40)return"ttfl-great";
@@ -193,12 +199,8 @@ function ttlfClass(v){
   return"ttfl-neg";
 }
 
-function calcBonus(p){
-  return p.pts + p.reb + p.ast + p.stl + p.blk + p.fgm + p.tpm + p.ftm;
-}
-function calcMalus(p){
-  return p.to + (p.fga - p.fgm) + (p.tpa - p.tpm) + (p.fta - p.ftm);
-}
+function calcBonus(p){return p.pts+p.reb+p.ast+p.stl+p.blk+p.fgm+p.tpm+p.ftm}
+function calcMalus(p){return p.to+(p.fga-p.fgm)+(p.tpa-p.tpm)+(p.fta-p.ftm)}
 
 function buildTeamTable(teamData,teamId){
   if(!teamData||!teamData.players||!teamData.players.length)
@@ -207,10 +209,10 @@ function buildTeamTable(teamData,teamId){
     const bonus=calcBonus(p);
     const malus=calcMalus(p);
     const total=bonus-malus;
-    return "<tr>"
+    return"<tr>"
       +"<td class='col-bonus'>"+bonus+"</td>"
       +"<td class='col-malus'>-"+malus+"</td>"
-      +"<td class='col-total "+ttlfClass(total)+"'>"+total+"</td>"
+      +"<td class='col-total "+ttflClass(total)+"'>"+total+"</td>"
       +"<td>"+p.name+"</td>"
       +"<td>"+p.min+"'</td>"
       +"<td>"+p.pts+"</td>"
@@ -239,7 +241,7 @@ function toggleBoxscore(gameId,panelEl,btnEl){
   panelEl.classList.add("open");btnEl.classList.add("open");
   const live=liveIndex[gameId];
   const gDef=GAMES.find(g=>g.gameId===gameId);
-  if(!live){panelEl.innerHTML='<div class="bs-loading">Stats non disponibles.</div>';return}
+  if(!live){panelEl.innerHTML='<div style="padding:1rem;text-align:center;font-size:.8rem;color:var(--text-faint)">Stats non disponibles.</div>';return}
   panelEl.innerHTML=
     buildTeamTable(live.homeTeam,gDef.homeTeamId)+
     buildTeamTable(live.awayTeam,gDef.awayTeamId)+
@@ -253,22 +255,22 @@ function renderCards(){
   if(!games.length){grid.innerHTML='<div class="empty">Aucun match</div>';return}
   grid.innerHTML=games.map(g=>{
     const live=liveIndex[g.gameId];
-    const status=live?live.gameStatus:1;
-    const statusText=live?live.gameStatusText:"--";
-    const hScore=live?live.homeTeam.score:(g.homeScore||"--");
-    const aScore=live?live.awayTeam.score:(g.awayScore||"--");
+    const status=live?live.gameStatus:g.gameStatus;
+    const statusText=live?live.gameStatusText:g.gameStatusText;
+    const hScore=live&&live.gameStatus>=2?live.homeTeam.score:(g.gameStatus===3?g.homeScore:"—");
+    const aScore=live&&live.gameStatus>=2?live.awayTeam.score:(g.gameStatus===3?g.awayScore:"—");
     const isF=status===3,isL=status===2;
     const badgeCls=isF?"badge-final":isL?"badge-live":"badge-soon";
-    const badgeTxt=isF?"Final":isL?"LIVE"+(live.gameClock?" "+live.gameClock:""):statusText;
-    const showScore=isF||isL;
+    const badgeTxt=isF?g.gameStatusText:isL?"LIVE"+(live&&live.gameClock?" "+live.gameClock:""):statusText;
+    const showScore=isF||(live&&isL);
     const dt=new Date(g.gameDateTimeUTC);
     const dateStr=dt.toLocaleDateString("fr-FR",{day:"2-digit",month:"short"});
-    const canExpand=isF||isL;
+    const canExpand=isF||(live&&isL);
     return'<div class="pick-card">'
-      +'<div class="card-header"><div class="card-meta"><strong>'+g.gameLabel+" - "+g.gameSubLabel+"</strong>"+dateStr+'</div><span class="pick-badge '+badgeCls+'">'+badgeTxt+"</span></div>"
+      +'<div class="card-header"><div class="card-meta"><strong>'+g.gameLabel+" – "+g.gameSubLabel+"</strong>"+dateStr+'</div><span class="pick-badge '+badgeCls+'">'+badgeTxt+"</span></div>"
       +'<div class="score-row">'
       +'<div class="team-side"><img class="team-logo" src="'+logo(g.homeTeamId)+'" loading="lazy" width="36" height="36"><span class="team-code">'+g.homeTeamTricode+"</span></div>"
-      +'<div class="score-center"><div class="score-main"><span class="score-num">'+(showScore?hScore:"-")+'</span><span class="score-dash">-</span><span class="score-num">'+(showScore?aScore:"-")+'</span></div><div class="series-txt">'+(g.seriesText||"")+"</div></div>"
+      +'<div class="score-center"><div class="score-main"><span class="score-num">'+(showScore?hScore:"—")+'</span><span class="score-dash">–</span><span class="score-num">'+(showScore?aScore:"—")+'</span></div><div class="series-txt">'+(g.seriesText||"")+"</div></div>"
       +'<div class="team-side"><img class="team-logo" src="'+logo(g.awayTeamId)+'" loading="lazy" width="36" height="36"><span class="team-code">'+g.awayTeamTricode+"</span></div>"
       +"</div>"
       +(canExpand?'<button class="expand-btn" id="btn-'+g.gameId+'" onclick="toggleBoxscore(\''+g.gameId+'\',document.getElementById(\'bs-'+g.gameId+'\'),this)">Stats joueurs &amp; TTLF <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button><div class="boxscore-panel" id="bs-'+g.gameId+'"></div>':"")
